@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-
 from django.utils import timezone
 
 from .models import Booking, AvailableSlot, User
@@ -14,10 +13,6 @@ from .models import Booking, AvailableSlot, User
 def index(request):
     available_slots = AvailableSlot.objects.filter(start_time__gte=timezone.now()).order_by('start_time')
     return render(request, 'booking_system/index.html', {'available_slots': available_slots})
-
-
-def bookings(request):
-    return render(request, 'booking_system/bookings.html')
 
 
 @login_required
@@ -38,6 +33,50 @@ def create_slots(request):
         return HttpResponseRedirect(reverse('index'))
 
     return render(request, 'booking_system/create_slots.html')
+
+
+@login_required
+def slot_detail(request, slot_id):
+    slot = AvailableSlot.objects.get(id=slot_id)
+    return render(request, 'booking_system/slot_detail.html', {'slot': slot})
+
+@login_required
+def book_slot(request, slot_id):
+    if request.user.role != 'patient':
+        return HttpResponseRedirect(reverse('index'))
+    
+    slot = AvailableSlot.objects.get(id=slot_id)
+    if slot.is_booked:
+        messages.error(request, 'This slot is already booked')
+        return HttpResponseRedirect(reverse('index'))
+    
+    Booking.objects.create(doctor=slot.doctor, patient=request.user, slot=slot)
+    slot.is_booked = True
+    slot.save()
+    return HttpResponseRedirect(reverse('index'))
+
+
+@login_required
+def edit_slot(request, slot_id):
+    slot = AvailableSlot.objects.get(id=slot_id)
+    if request.user != slot.doctor:
+        return HttpResponseRedirect(reverse('index'))
+    
+    if request.method == 'POST':
+        start_time = request.POST['start_time']
+        end_time = request.POST['end_time']
+        
+        if not start_time or not end_time:
+            return render(request, 'booking_system/edit_slot.html', {'slot': slot, 'error': 'Start time and end time are required'})
+        elif start_time >= end_time:
+            return render(request, 'booking_system/edit_slot.html', {'slot': slot, 'error': 'Start time must be before end time'})
+        
+        slot.start_time = start_time
+        slot.end_time = end_time
+        slot.save()
+        return HttpResponseRedirect(reverse('index'))
+
+    return render(request, 'booking_system/edit_slot.html', {'slot': slot})
 
 
 def register_view(request):

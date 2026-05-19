@@ -1,0 +1,31 @@
+{% extends 'booking_system/layout.html' %}
+
+{% block title %}{{ slot.name }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid card mt-4">
+        <h1>{{ slot.name }}</h1>
+        <p><strong>Doctor:</strong> {{ slot.doctor.username }}</p>
+        <p><strong>Start Time:</strong> {{ slot.start_time }}</p>
+        <p><strong>End Time:</strong> {{ slot.end_time }}</p>
+        {% if user.is_authenticated %}
+            {% if user.role == 'patient' %}
+                {% if slot.is_booked %}
+                    <p class="text-danger">This slot is already booked by another patient.</p>
+                {% else %}
+                    <form method="post" action="{% url 'book_slot' slot.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Book Slot</button>
+                    </form>
+                {% endif %}
+            {% elif user.role == 'doctor' %}
+                <form method="post" action="{% url 'edit_slot' slot.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Edit Slot</button>
+                </form>
+            {% endif %}
+        {% else %}
+            <p><a href="{% url 'login' %}">Log in</a> to book this slot.</p>
+        {% endif %}
+    </div>
+{% endblock %}

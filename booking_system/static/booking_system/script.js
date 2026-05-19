@@ -2,7 +2,7 @@
 slotCards = document.querySelectorAll('.slot-card');
 
 slotCards.forEach(card => {
-    //const slotId = card.getAttribute('data-slot-id');
+    const slotId = card.dataset.id;
     card.addEventListener("click", () => {
         console.log(`Slot ID: ${slotId}`);
         window.location.href = `/slot/${slotId}/`;

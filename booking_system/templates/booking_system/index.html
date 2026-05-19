@@ -9,15 +9,17 @@
             <hr>
             <ul class="list-group">
                 {% for slot in available_slots %}
-                    <li class=" list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Doctor:</strong> {{ slot.doctor.username }}<br>
-                            <strong>Start Time:</strong> {{ slot.start_time|date:"D M d, Y H:i" }}<br>
-                            <strong>End Time:</strong> {{ slot.end_time|date:"D M d, Y H:i" }}
-                            <br>
-                        </div>
-                    </li>
+                    {% if user.is_authenticated and not slot.is_booked %}
+                        <li class="card slot-card mb-3" data-id="{{ slot.id }}">
+                            <div>
+                                <strong>Doctor:</strong> {{ slot.doctor.username }}<br>
+                                <strong>Start Time:</strong> {{ slot.start_time|date:"D M d, Y H:i" }}<br>
+                                <strong>End Time:</strong> {{ slot.end_time|date:"D M d, Y H:i" }}
+                            </div>
+                        </li>
+                    {% endif %}
                 {% endfor %}
+            </ul>
         {% else %}
             <h1>No available slots at the moment.</h1>
         {% endif %}

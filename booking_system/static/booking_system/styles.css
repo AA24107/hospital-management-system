@@ -1,0 +1,17 @@
+
+
+.slot-cards {
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    display: block;
+    cursor: pointer;
+    padding: 15px;
+    transition: 0.2s;
+}
+
+.slot-cards:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: rgb(170, 174, 179);
+}

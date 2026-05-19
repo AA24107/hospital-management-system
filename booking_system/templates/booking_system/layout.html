@@ -17,6 +17,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'index' %}">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        </li>
                         {% if user.role == 'doctor' %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'create_slots' %}">Create Slots</a>

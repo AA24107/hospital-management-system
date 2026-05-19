@@ -16,6 +16,16 @@ def index(request):
 
 
 @login_required
+def dashboard(request):
+    available_slots = AvailableSlot.objects.filter(start_time__gte=timezone.now()).order_by('start_time')
+    patient_bookings = Booking.objects.filter(patient=request.user).select_related('slot', 'doctor')
+    return render(request, 'booking_system/dashboard.html', {
+        'available_slots': available_slots,
+        'patient_bookings': patient_bookings
+    })
+
+
+@login_required
 def create_slots(request):
     if request.user.role != 'doctor':  
         return HttpResponseRedirect(reverse('index'))
@@ -39,6 +49,7 @@ def create_slots(request):
 def slot_detail(request, slot_id):
     slot = AvailableSlot.objects.get(id=slot_id)
     return render(request, 'booking_system/slot_detail.html', {'slot': slot})
+
 
 @login_required
 def book_slot(request, slot_id):

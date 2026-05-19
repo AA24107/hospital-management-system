@@ -1,0 +1,53 @@
+{% extends "booking_system/layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="container-fluid mt-4">
+            <h1>Dashboard</h1>
+            <p>Welcome, {{ user.username }}!</p>
+        </div>
+        {% if request.user.role == 'doctor' %}
+            <div class="container-fluid mt-4">
+                <h2>Your Slots</h2>
+                <!-- Display available slots for the doctor -->
+                {% for slot in available_slots %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ slot.name }}</h5>
+                            <p class="card-text"><strong>Start Time:</strong> {{ slot.start_time }}</p>
+                            <p class="card-text"><strong>End Time:</strong> {{ slot.end_time }}</p>
+                            {% if slot.is_booked %}
+                                <p class="card-text"><strong>Patient:</strong> {{ slot.booking.patient.username }}</p>
+                            {% else %}
+                                <a href="{% url 'edit_slot' slot.id %}" class="btn btn-primary">Edit Slot</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if request.user.role == 'patient' %}
+            <div class="container-fluid mt-4">
+                <h2>Your Bookings</h2>
+                <!-- Bookings for the patient -->
+                {% for booking in patient_bookings %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ booking.slot.name }}</h5>
+                            <p class="card-text"><strong>Doctor:</strong> {{ booking.doctor.username }}</p>
+                            <p class="card-text"><strong>Start Time:</strong> {{ booking.slot.start_time }}</p>
+                            <p class="card-text"><strong>End Time:</strong> {{ booking.slot.end_time }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="container-fluid mt-4">
+            <h1>Dashboard</h1>
+            <p>Please log in to access your dashboard.</p>
+        </div>
+    {% endif %}
+{% endblock %}

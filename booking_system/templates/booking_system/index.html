@@ -13,8 +13,8 @@
                         <li class="card slot-card mb-3" data-id="{{ slot.id }}">
                             <div>
                                 <strong>Doctor:</strong> {{ slot.doctor.username }}<br>
-                                <strong>Start Time:</strong> {{ slot.start_time|date:"D M d, Y H:i" }}<br>
-                                <strong>End Time:</strong> {{ slot.end_time|date:"D M d, Y H:i" }}
+                                <strong>Start Time:</strong> {{ slot.start_time }}<br>
+                                <strong>End Time:</strong> {{ slot.end_time }} <br>
                             </div>
                         </li>
                     {% endif %}

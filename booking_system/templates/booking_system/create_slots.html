@@ -9,23 +9,51 @@
                 {{ error }}
             </div>
         {% endif %}
-    <div class="container mt-4">
-        <h1>Create Slots</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="start_time" class="form-label">Start Time [24 hour system]</label>
-                <input type="datetime-local" class="form-control" value="{{ slot.start_time|date:'Y-m-d\TH:i' }}" id="start_time" name="start_time" required>
-            </div>
-            <div class="mb-3">
-                <label for="end_time" class="form-label">End Time [24 hour system]</label>
-                <input type="datetime-local" class="form-control" value="{{ slot.end_time|date:'Y-m-d\TH:i' }}" id="end_time" name="end_time" required>
-            </div>
-            {% if slot %}
-                <button type="submit" class="btn btn-primary">Update Slot</button>
+        <form method="post"
+            action="{% if slot %}
+                {% url 'edit_slot' slot.id %}
             {% else %}
-                <button type="submit" class="btn btn-primary">Create Slot</button>
-            {% endif %}
+                {% url 'create_slots' %}
+            {% endif %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="start_time" class="form-label">
+                Start Time [24 hour system]
+            </label>
+            <input
+                type="datetime-local"
+                class="form-control"
+                value="{{ slot.start_time|date:'Y-m-d\\ H:i' }}"
+                id="start_time"
+                name="start_time"
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label for="end_time" class="form-label">
+                End Time [24 hour system]
+            </label>
+
+            <input
+                type="datetime-local"
+                class="form-control"
+                value="{{ slot.end_time|date:'Y-m-d\\ H:i' }}"
+                id="end_time"
+                name="end_time"
+                required
+            >
+        </div>
+
+        {% if slot %}
+            <button type="submit" class="btn btn-primary">
+                Update Slot
+            </button>
+        {% else %}
+            <button type="submit" class="btn btn-primary">
+                Create Slot
+            </button>
+        {% endif %}
         </form>
     </div>
 {% endblock %}

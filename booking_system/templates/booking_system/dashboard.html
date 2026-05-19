@@ -7,6 +7,17 @@
         <div class="container-fluid mt-4">
             <h1>Welcome, {{ user.username }}!</h1>
         </div>
+        {% if google_creds %} 
+            <div class="alert alert-success mt-3" role="alert">
+                Google Calendar is connected.
+            </div>
+        {% else %}
+            <div class="alert alert-warning mt-3" role="alert">
+                Google Calendar is not connected. Please connect to sync your appointments.
+                <br>
+                <button class="btn btn-secondary mt-3" onclick="window.location.href=`{% url 'google_connect' %}`">Connect Google Calendar</button>
+            </div>
+        {% endif %}
         {% if request.user.role == 'doctor' %}
             <div class="container-fluid mt-4">
                 <h2>Your Slots</h2>

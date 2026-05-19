@@ -67,3 +67,16 @@ class AvailableSlot(models.Model):
     def __str__(self):
         return f"{self.doctor.username} | {self.start_time}"
 
+
+class GoogleCredentials(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    access_token = models.TextField()
+    refresh_token = models.TextField()
+
+    token_uri = models.URLField(default='https://oauth2.googleapis.com/token')
+
+    client_id = models.TextField()
+    client_secret = models.TextField()
+
+    scopes = models.TextField()

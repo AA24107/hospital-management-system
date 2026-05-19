@@ -13,4 +13,6 @@ urlpatterns = [
     path('edit/<int:slot_id>/', views.edit_slot, name='edit_slot'),
     path('delete/<int:slot_id>/', views.delete_slot, name='delete_slot'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path("google/connect/", views.google_connect, name="google_connect"),
+    path("google/callback/", views.google_callback, name="google_callback"),
 ]

@@ -18,11 +18,8 @@
                         <button type="submit" class="btn btn-primary">Book Slot</button>
                     </form>
                 {% endif %}
-            {% elif user.role == 'doctor' %}
-                <form method="post" action="{% url 'edit_slot' slot.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Edit Slot</button>
-                </form>
+            {% elif user.role == 'doctor' and user == slot.doctor %}
+                <a href="{% url 'edit_slot' slot.id %}" class="btn btn-primary" style="width: fit-content;">Edit Slot</a>
             {% endif %}
         {% else %}
             <p><a href="{% url 'login' %}">Log in</a> to book this slot.</p>

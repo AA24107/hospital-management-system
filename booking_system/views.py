@@ -5,15 +5,39 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 
+from django.utils import timezone
+
 from .models import Booking, AvailableSlot, User
 
 
 # Create your views here.
-
 def index(request):
-    return render(request, 'booking_system/index.html')
+    available_slots = AvailableSlot.objects.filter(start_time__gte=timezone.now()).order_by('start_time')
+    return render(request, 'booking_system/index.html', {'available_slots': available_slots})
 
 
+def bookings(request):
+    return render(request, 'booking_system/bookings.html')
+
+
+@login_required
+def create_slots(request):
+    if request.user.role != 'doctor':  
+        return HttpResponseRedirect(reverse('index'))
+    if request.method == 'POST':
+        doctor = request.user
+        start_time = request.POST['start_time']
+        end_time = request.POST['end_time']
+        
+        if not start_time or not end_time:
+            return render(request, 'booking_system/create_slots.html', {'error': 'Start time and end time are required'})
+        elif start_time >= end_time:
+            return render(request, 'booking_system/create_slots.html', {'error': 'Start time must be before end time'})
+        
+        AvailableSlot.objects.create(doctor=doctor, start_time=start_time, end_time=end_time)
+        return HttpResponseRedirect(reverse('index'))
+
+    return render(request, 'booking_system/create_slots.html')
 
 
 def register_view(request):

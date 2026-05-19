@@ -1,0 +1,27 @@
+{% extends 'booking_system/layout.html' %}
+
+{% block title %}Create Slots{% endblock %}
+
+{% block content %}
+    <div class="container mt-4 error-container">
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+    <div class="container mt-4">
+        <h1>Create Slots</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="start_time" class="form-label">Start Time</label>
+                <input type="datetime-local" class="form-control" id="start_time" name="start_time" required>
+            </div>
+            <div class="mb-3">
+                <label for="end_time" class="form-label">End Time</label>
+                <input type="datetime-local" class="form-control" id="end_time" name="end_time" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Slot</button>
+        </form>
+    </div>
+{% endblock %}

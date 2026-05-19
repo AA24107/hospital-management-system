@@ -27,6 +27,7 @@ class Booking(models.Model):
 
         if self.slot.is_booked:
             raise ValidationError("Slot already booked")
+
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)

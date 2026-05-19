@@ -3,9 +3,23 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <div class="container mt-4">
-        <h1>Welcome to the Booking System</h1>
-        <p>This is the home page. Use the navigation bar to access different sections of the booking system.</p>
-
+    <div class="container-fluid mt-4">
+        {% if available_slots %}
+            <h1>Available Slots</h1>
+            <hr>
+            <ul class="list-group">
+                {% for slot in available_slots %}
+                    <li class=" list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Doctor:</strong> {{ slot.doctor.username }}<br>
+                            <strong>Start Time:</strong> {{ slot.start_time|date:"D M d, Y H:i" }}<br>
+                            <strong>End Time:</strong> {{ slot.end_time|date:"D M d, Y H:i" }}
+                            <br>
+                        </div>
+                    </li>
+                {% endfor %}
+        {% else %}
+            <h1>No available slots at the moment.</h1>
+        {% endif %}
     </div>
 {% endblock %}

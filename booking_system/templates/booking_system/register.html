@@ -1,0 +1,43 @@
+{% extends 'booking_system/layout.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %} 
+<br>
+<div class="card">
+    <br>
+    <div class="container-fluid ">
+        <h1>Register</h1>
+        <form class="card-body" action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input  class="form-control" name="username" autofocus type="text" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input  class="form-control" name="email" type="email" placeholder="Email">
+            </div>
+            <div>
+                <label for="role">Register as:</label>
+                <select class="form-control" name="role">
+                    <option value="patient">Patient</option>
+                    <option value="doctor">Doctor</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input  class="form-control" name="password" type="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="confirm">Confirm Password:</label>
+                <input  class="form-control" name="confirm" type="password" placeholder="Confirm Password">
+            </div>
+            <div class="form-group">
+                <input  class="btn btn-primary" type="submit" value="Register">
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "booking_system/layout.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %} 
+<br>
+<div class="card">
+    <div class="container-fluid ">
+        <h1>Login</h1>
+        <form class="card-body" action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input  class="form-control" autofocus type="text" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input  class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <input  class="btn btn-primary" type="submit" value="Login">
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

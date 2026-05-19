@@ -10,7 +10,7 @@
         {% if request.user.role == 'doctor' %}
             <div class="container-fluid mt-4">
                 <h2>Your Slots</h2>
-                <!-- Display available slots for the doctor -->
+                <!-- Slots for the doctor -->
                 {% for slot in available_slots %}
                     <div class="card mb-3">
                         <div class="card-body">

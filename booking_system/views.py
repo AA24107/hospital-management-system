@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.utils import timezone
+from django.db import transaction
 
 from .models import Booking, AvailableSlot, User
 
@@ -53,18 +54,19 @@ def slot_detail(request, slot_id):
 
 @login_required
 def book_slot(request, slot_id):
-    if request.user.role != 'patient':
+    with transaction.atomic():
+        if request.user.role != 'patient':
+            return HttpResponseRedirect(reverse('index'))
+        
+        slot = AvailableSlot.objects.select_for_update().get(id=slot_id)
+        if slot.is_booked:
+            messages.error(request, 'This slot is already booked')
+            return HttpResponseRedirect(reverse('index'))
+        
+        Booking.objects.create(doctor=slot.doctor, patient=request.user, slot=slot)
+        slot.is_booked = True
+        slot.save()
         return HttpResponseRedirect(reverse('index'))
-    
-    slot = AvailableSlot.objects.get(id=slot_id)
-    if slot.is_booked:
-        messages.error(request, 'This slot is already booked')
-        return HttpResponseRedirect(reverse('index'))
-    
-    Booking.objects.create(doctor=slot.doctor, patient=request.user, slot=slot)
-    slot.is_booked = True
-    slot.save()
-    return HttpResponseRedirect(reverse('index'))
 
 
 @login_required
@@ -92,7 +94,7 @@ def edit_slot(request, slot_id):
 
 @login_required
 def delete_slot(request, slot_id):
-    slot = AvailableSlot.objects.get(id=slot_id)
+    slot = AvailableSlot.objects.select_for_update().get(id=slot_id)
     if request.user != slot.doctor or slot.is_booked:
         return HttpResponseRedirect(reverse('index'))
     

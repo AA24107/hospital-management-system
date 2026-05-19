@@ -5,8 +5,7 @@
 {% block content %}
     {% if user.is_authenticated %}
         <div class="container-fluid mt-4">
-            <h1>Dashboard</h1>
-            <p>Welcome, {{ user.username }}!</p>
+            <h1>Welcome, {{ user.username }}!</h1>
         </div>
         {% if request.user.role == 'doctor' %}
             <div class="container-fluid mt-4">
@@ -22,6 +21,10 @@
                                 <p class="card-text"><strong>Patient:</strong> {{ slot.booking.patient.username }}</p>
                             {% else %}
                                 <a href="{% url 'edit_slot' slot.id %}" class="btn btn-primary">Edit Slot</a>
+                                <form action="{% url 'delete_slot' slot.id %}" method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete Slot</button>
+                                </form>
                             {% endif %}
                         </div>
                     </div>

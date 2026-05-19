@@ -15,13 +15,17 @@
             {% csrf_token %}
             <div class="mb-3">
                 <label for="start_time" class="form-label">Start Time [24 hour system]</label>
-                <input type="datetime-local" class="form-control" id="start_time" name="start_time" required>
+                <input type="datetime-local" class="form-control" value="{{ slot.start_time|date:'Y-m-d\TH:i' }}" id="start_time" name="start_time" required>
             </div>
             <div class="mb-3">
                 <label for="end_time" class="form-label">End Time [24 hour system]</label>
-                <input type="datetime-local" class="form-control" id="end_time" name="end_time" required>
+                <input type="datetime-local" class="form-control" value="{{ slot.end_time|date:'Y-m-d\TH:i' }}" id="end_time" name="end_time" required>
             </div>
-            <button type="submit" class="btn btn-primary">Create Slot</button>
+            {% if slot %}
+                <button type="submit" class="btn btn-primary">Update Slot</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary">Create Slot</button>
+            {% endif %}
         </form>
     </div>
 {% endblock %}

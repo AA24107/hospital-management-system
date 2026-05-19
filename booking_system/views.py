@@ -70,7 +70,7 @@ def book_slot(request, slot_id):
 @login_required
 def edit_slot(request, slot_id):
     slot = AvailableSlot.objects.get(id=slot_id)
-    if request.user != slot.doctor:
+    if request.user != slot.doctor or slot.is_booked:
         return HttpResponseRedirect(reverse('index'))
     
     if request.method == 'POST':
@@ -87,8 +87,18 @@ def edit_slot(request, slot_id):
         slot.save()
         return HttpResponseRedirect(reverse('index'))
 
-    return render(request, 'booking_system/edit_slot.html', {'slot': slot})
+    return render(request, 'booking_system/create_slots.html', {'slot': slot})
 
+
+@login_required
+def delete_slot(request, slot_id):
+    slot = AvailableSlot.objects.get(id=slot_id)
+    if request.user != slot.doctor or slot.is_booked:
+        return HttpResponseRedirect(reverse('index'))
+    
+    if request.method == 'POST':
+        slot.delete()
+        return HttpResponseRedirect(reverse('index'))
 
 def register_view(request):
     if request.method == 'POST':

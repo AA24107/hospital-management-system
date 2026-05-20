@@ -92,6 +92,7 @@ def book_slot(request, slot_id):
     
         except Exception as e:
             messages.error(request, 'Error occurred while creating Google Calendar event')
+            slot.is_booked = False
 
         return HttpResponseRedirect(reverse('index'))
 

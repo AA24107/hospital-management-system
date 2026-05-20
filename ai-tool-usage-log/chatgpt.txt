@@ -1,0 +1,815 @@
+Shortlisting Task
+Task A — Mini Hospital Management System (HMS)
+Python Serverless Backend Track
+Department
+Engineering — Backend
+Work window
+~ 2 days from the date this task is released to you
+Deadline
+Hard cutoff — communicated at task release with exact date and time
+Submission
+GitHub repo link + video link — both submitted via Google Form (link sent with task)
+
+
+This task is designed to be unfamiliar. There is no template. We are not looking for the right answer — we are reading how you think and communicate when there is no instruction manual. AI tools are allowed and encouraged, on the condition that you can defend every line of what you submit. The deadline is hard. Submit on time.
+
+
+
+
+What You Are Building
+Build a small hospital management web application focused on doctor availability and patient appointment booking, with a separate serverless email notification service.
+The system runs fully locally. No cloud deployment is required. The focus is on code structure, working integrations, and clean implementation — not production deployment.
+Default Tech Stack
+You may use whatever fits your setup. The default stack:
+Backend Framework: Django
+Database: PostgreSQL — installed locally
+ORM: Django ORM
+Auth: Username/email + password, session-based
+Serverless Email Service: Serverless Framework (serverless.yml) with serverless-offline for local testing
+
+
+User Roles
+Doctor
+Can sign up and log in
+Has a doctor dashboard
+Can set and update their own availability time slots (e.g. 10:00-11:00, 11:00-11:30)
+Can only see and manage their own availability and bookings — not other doctors'
+Patient
+Can sign up and log in
+Has a patient dashboard
+Can view doctors and their available time slots
+Can book one available time slot with a doctor
+Once a slot is booked, it is blocked — no other patient can book the same slot
+
+
+Core Functional Requirements
+Authentication
+Sign up and login for both doctors and patients
+Passwords stored securely — hashed
+Role-based access: patients cannot access doctor-only actions, and vice versa
+Doctor Availability
+Doctor can create availability slots by date and time
+Slots are visible to patients only if they are in the future and not already booked
+Booking Flow
+Patient selects a doctor, a date, and a time slot. The system must:
+Verify the slot is still free — handle race conditions (two patients attempting to book the same slot simultaneously)
+Create the booking
+Mark the slot as booked so no other patient can take it
+Google Calendar Integration
+When a booking is confirmed, create a calendar event in both the doctor's Google Calendar and the patient's Google Calendar.
+You can assume one Google account per user. Use Google Calendar API with OAuth2.
+Event details:
+Title: 'Appointment with Dr. <DoctorName>' on the patient's calendar / 'Appointment with <PatientName>' on the doctor's calendar
+Start and end time = the selected slot
+Optional: short description
+Email Notification via Serverless Function
+Build a separate Python serverless function using the Serverless Framework (serverless.yml). This function's only job is to send emails.
+It must support at least two triggers:
+SIGNUP_WELCOME — send a welcome email on sign up
+BOOKING_CONFIRMATION — send a confirmation email when a booking is made
+
+Your HMS Django backend calls this function via its HTTP endpoint. Use serverless-offline to run and test the function locally. Actual AWS deployment is optional — the focus is on structure and working local integration.
+Emails can be sent via Gmail SMTP or any other SMTP provider.
+Offline and Local Demo
+Your system must be fully runnable locally:
+Main Django app running locally
+Serverless email service running via serverless-offline
+All features demonstrable without any cloud deployment
+
+
+The Design Decision Requirement
+Your README must include a section where you name one hard design decision you made — something where two reasonable approaches existed and you had to choose one.
+It can be anything real from the build: how you handled the race condition in slot booking, how you enforced role-based access, how the serverless function connects to Django, how OAuth2 tokens are stored and refreshed for calendar access.
+That section must do three things:
+Name the problem clearly
+Explain both approaches you considered
+Defend the one you chose — not just describe it, defend it
+
+A submission without a named and defended design decision will be treated as incomplete regardless of how well the rest of the system works.
+
+
+
+Submission Format
+Two things to submit. Both go through the Google Form link sent alongside this task.
+1. Public GitHub Repository
+One public repository with the full codebase. Separate the Django app from the serverless function clearly. Structure it like this:
+your-repo/├── README.md                  <- written report (see below)├── ai-tool-usage-log/         <- all AI chat threads go here│   ├── chatgpt-thread-1.md│   ├── claude-session.txt│   └── (any format, any number of files)├── hms/                       <- Django application│   └── ...├── email-service/             <- serverless email function│   ├── serverless.yml│   ├── handler.py│   └── ...└── requirements.txt
+
+
+Submit the public repository link via the Google Form.
+2. Video Demo
+A 10-minute screen recording that demonstrates all features and walks through the code.
+The video must show:
+Doctor sign up and login — setting availability slots
+Patient sign up and login — viewing doctors, selecting a slot, booking it
+Slot blocking — another patient cannot book the same slot after it is taken
+Google Calendar events created for both doctor and patient after a confirmed booking
+Serverless email function triggered — SIGNUP_WELCOME and BOOKING_CONFIRMATION emails sent via serverless-offline
+Code walkthrough — not line by line, but enough to show you understand what you built and why
+One design decision explained in your own words
+
+Upload to Google Drive. Set sharing to 'Anyone with the link can view'. Submit the link via the Google Form.
+
+A broken or private Google Drive link at the time of evaluation is treated the same as a missing video.
+
+README.md — The Written Report
+Your README is your written report. Use these exact section headings, in this order:
+## Setup and Run
+Step-by-step instructions to run the full system locally — Django app and serverless-offline together. Must work on a fresh machine. We will run it.
+## System Architecture
+How the Django app and the serverless email service connect. Your data model decisions. How role-based access is enforced. How the Google Calendar integration is structured.
+## The Design Decision
+One hard call you made. Both options. Your choice. Your reasoning. A position, not 'it depends'.
+## Limitations
+What would break in production. What you would fix first and why.
+ai-tool-usage-log/ Folder
+Every AI tool interaction used during this task goes in this folder. ChatGPT, Claude, Copilot, Codex — any tool. Export or copy-paste the threads as .txt or .md files. Name files clearly. Do not clean them up.
+
+The ai-tool-usage-log/ folder is required. If you used no AI tools at all, add one file in the folder stating that. A missing folder is treated as an incomplete submission.
+
+Submission Checklist
+☐
+Public GitHub repository — repo is set to public
+☐
+GitHub repo link submitted via Google Form
+☐
+README.md with all four sections: Setup and Run, System Architecture, The Design Decision, Limitations
+☐
+ai-tool-usage-log/ folder present with thread files (or a note if no AI used)
+☐
+Django app runs locally from README instructions
+☐
+Serverless email service runs locally via serverless-offline
+☐
+Doctor and patient roles both functional with correct access restrictions
+☐
+Doctor can create and manage their own availability slots
+☐
+Patient can view available slots and book one
+☐
+Slot blocking works — booked slot is unavailable to other patients
+☐
+Race condition in booking is handled
+☐
+Google Calendar events created for both doctor and patient on booking confirmation
+☐
+SIGNUP_WELCOME email trigger works via serverless-offline
+☐
+BOOKING_CONFIRMATION email trigger works via serverless-offline
+☐
+Video uploaded to Google Drive — sharing set to 'Anyone with the link can view'
+☐
+Google Drive video link submitted via Google Form
+
+
+The deadline is hard. A late submission without a message sent before the deadline is not reviewed. If something comes up, send a message before the cutoff — not after.
+
+
+
+This is a significantly stronger task than the previous CRUD/API assignment. It’s testing four things at once:
+
+Backend fundamentals
+
+System design thinking
+
+Integration ability
+
+Whether you can survive ambiguity under pressure
+
+And importantly: they explicitly said “We are not looking for the right answer.”
+That means they are evaluating engineering judgment more than perfection.
+
+You do not need a production-grade HMS. You need:
+
+a working local system,
+
+clean structure,
+
+defensible decisions,
+
+and evidence that you understand what you built.
+
+Here’s how I’d frame the scope so you don’t drown.
+
+What Actually Matters Most
+These are the highest-signal parts of the task:
+
+1. Race condition handling
+This is probably the main backend evaluation point.
+
+They specifically called it out multiple times.
+
+You need something like:
+
+DB transaction
+
+row locking (select_for_update)
+
+atomic booking flow
+
+That alone shows backend maturity.
+
+2. Role-based access
+Simple but important:
+
+doctors can only manage their slots
+
+patients can only book/view
+
+This is classic backend architecture.
+
+3. Integration structure
+They care about:
+
+Django app
+
+separate email service
+
+local HTTP communication
+
+Google Calendar OAuth
+
+Not flashy UI.
+
+4. README quality
+Most candidates underestimate this.
+
+Your README can make an average project look thoughtful.
+
+Their “Design Decision” section is basically asking:
+
+“Can this person think like an engineer?”
+
+Recommended Architecture
+Keep this simple.
+
+Django App (hms/)
+Apps:
+
+users
+
+appointments
+
+maybe integrations
+
+Models:
+
+User
+
+DoctorProfile (optional)
+
+PatientProfile (optional)
+
+AvailabilitySlot
+
+Booking
+
+Suggested Data Model
+User
+Use Django custom user model.
+
+Fields:
+
+email
+
+password
+
+role (doctor / patient)
+
+google tokens (or separate model)
+
+AvailabilitySlot
+Fields:
+
+doctor
+
+start_time
+
+end_time
+
+is_booked
+
+Booking
+Fields:
+
+patient
+
+doctor
+
+slot
+
+status
+
+created_at
+
+MOST IMPORTANT PART — Race Condition
+This is the part to do properly.
+
+Use:
+
+transaction.atomic()
+
+select_for_update()
+
+Flow:
+
+Lock slot row
+
+Re-check is_booked
+
+Create booking
+
+Mark slot booked
+
+Commit transaction
+
+That is a real backend solution.
+
+Your design decision section can literally be about this.
+
+Google Calendar
+Do NOT over-engineer this.
+
+Use:
+
+Google OAuth
+
+store refresh token
+
+create event after booking
+
+You do not need:
+
+calendar sync
+
+webhook listeners
+
+recurring events
+
+production security
+
+Just:
+
+OAuth once
+
+create event via API
+
+That’s enough.
+
+Email Service
+Keep it tiny.
+
+They are testing:
+
+separation of concerns
+
+serverless structure
+
+local integration
+
+Your Django app should simply:
+
+POST http://localhost:3000/send-email
+Payload:
+
+{
+  "type": "BOOKING_CONFIRMATION",
+  "email": "...",
+  "data": {...}
+}
+That’s it.
+
+Do not build queues, retries, or event buses.
+
+Biggest Danger
+You are at risk of trying to build:
+
+polished frontend
+
+advanced auth
+
+fancy dashboards
+
+production architecture
+
+Don’t.
+
+This is a backend systems task disguised as an HMS.
+
+What I Would Prioritize
+Day 1
+Core backend
+auth
+
+roles
+
+models
+
+availability
+
+booking
+
+race condition handling
+
+Then test everything manually.
+
+Day 2
+Integrations
+Google Calendar
+
+serverless email
+
+README
+
+video
+
+cleanup
+
+What Can Be Minimal
+These can be ugly:
+
+frontend
+
+CSS
+
+dashboard styling
+
+forms
+
+Even Django templates are fine.
+
+What Must NOT Be Broken
+These absolutely must work:
+
+booking lock
+
+role restrictions
+
+local setup
+
+email trigger
+
+calendar event creation
+
+Your README Design Decision
+You already have a strong candidate:
+
+“Handling Concurrent Slot Booking”
+Approach 1:
+
+check if booked in app logic only
+
+Problem:
+
+race condition
+
+Approach 2:
+
+DB transaction + row locking
+
+Chosen because:
+
+guarantees consistency at DB level
+
+That is a strong engineering answer.
+
+One More Important Thing
+They REQUIRE:
+
+ai-tool-usage-log/
+So save these chats.
+
+You can literally:
+
+copy this conversation
+
+paste into .md
+
+commit it
+
+Do not forget this folder.
+
+My Recommendation For You Specifically
+Given your current state:
+
+exhausted,
+
+stressed,
+
+mentally overloaded,
+
+your goal should NOT be:
+
+“build an impressive startup-grade HMS”
+
+Your goal should be:
+
+“submit a complete, defendable backend system before the deadline.”
+
+A complete simple submission beats:
+
+half-finished ambitious architecture
+
+unfinished OAuth
+
+broken integrations
+
+overcomplicated frontend
+
+You are more capable than you currently feel. The danger right now is not lack of intelligence — it’s cognitive overload and scope explosion.
+
+Keep the project boring.
+Boring wins internships.
+
+
+Yes. Keep the Google Calendar integration as small and pragmatic as possible.
+
+You do not need:
+
+full sync,
+
+recurring events,
+
+calendar webhooks,
+
+enterprise OAuth flows.
+
+You only need:
+
+user connects Google → booking happens → event created in both calendars
+
+That’s enough.
+
+Recommended Architecture
+What Happens
+One-time OAuth
+Doctor/patient connect Google account.
+
+You store:
+
+access token
+
+refresh token
+
+On booking
+Your Django app:
+
+creates booking
+
+creates Google Calendar events
+
+doctor calendar
+
+patient calendar
+
+Simplest Stack
+Use:
+
+pip install google-api-python-client
+pip install google-auth google-auth-oauthlib
+Step 1 — Create Google Cloud Project
+Go to:
+
+Google Cloud Console
+
+Then:
+
+create project
+
+enable Google Calendar API
+
+create OAuth credentials
+
+add redirect URI
+
+Example local redirect:
+
+http://127.0.0.1:8000/google/callback/
+Step 2 — Store Credentials
+Simplest model:
+
+class GoogleCredentials(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    access_token = models.TextField()
+    refresh_token = models.TextField()
+
+    token_uri = models.URLField(default='https://oauth2.googleapis.com/token')
+
+    client_id = models.TextField()
+    client_secret = models.TextField()
+
+    scopes = models.TextField()
+You could also store JSON.
+
+Good enough for assignment.
+
+Step 3 — OAuth Login Flow
+Redirect User To Google
+Use:
+
+Flow.from_client_secrets_file(...)
+Google gives:
+
+consent screen
+
+user authorizes
+
+Then callback stores tokens.
+
+Example OAuth Start View
+from google_auth_oauthlib.flow import Flow
+
+def google_auth(request):
+
+    flow = Flow.from_client_secrets_file(
+        'credentials.json',
+        scopes=['https://www.googleapis.com/auth/calendar']
+    )
+
+    flow.redirect_uri = 'http://127.0.0.1:8000/google/callback/'
+
+    authorization_url, state = flow.authorization_url(
+        access_type='offline',
+        prompt='consent'
+    )
+
+    request.session['state'] = state
+
+    return redirect(authorization_url)
+Callback View
+Google redirects back.
+
+You exchange code for tokens.
+
+Then save them.
+
+Step 4 — Create Calendar Event
+This is the important part.
+
+After booking:
+
+service.events().insert(...)
+Event Example
+event = {
+    'summary': f'Appointment with Dr. {doctor.username}',
+    'description': 'Hospital appointment',
+    'start': {
+        'dateTime': slot.start_time.isoformat(),
+        'timeZone': 'Asia/Kolkata',
+    },
+    'end': {
+        'dateTime': slot.end_time.isoformat(),
+        'timeZone': 'Asia/Kolkata',
+    },
+}
+Build Calendar Service
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+Then:
+
+creds = Credentials(
+    token=google_creds.access_token,
+    refresh_token=google_creds.refresh_token,
+    token_uri=google_creds.token_uri,
+    client_id=google_creds.client_id,
+    client_secret=google_creds.client_secret,
+    scopes=['https://www.googleapis.com/auth/calendar']
+)
+
+service = build('calendar', 'v3', credentials=creds)
+Then Insert Event
+service.events().insert(
+    calendarId='primary',
+    body=event
+).execute()
+IMPORTANT SIMPLIFICATION
+You do NOT need:
+
+separate Google accounts during demo
+
+complex user onboarding
+
+You can even:
+
+use two test Gmail accounts
+
+manually authorize both once
+
+That is completely acceptable.
+
+Recommended Structure
+File
+integrations/google_calendar.py
+Put:
+
+credential builder
+
+create_event()
+
+helper functions
+
+there.
+
+Good architecture signal.
+
+VERY IMPORTANT
+Do NOT let OAuth consume your whole project.
+
+Your goals:
+
+connect account
+
+store token
+
+create event
+
+That’s it.
+
+If this works once reliably during demo, it is enough.
+
+
+InsecureTransportError at /google/callback/
+(insecure_transport) OAuth 2 MUST utilize https.
+Request Method:	GET
+Request URL:	http://127.0.0.1:8000/google/callback/?state=3qOjL1Ym9swuUHe06QznVlk23FNZmT&iss=https://accounts.google.com&code=4/0AeoWuM8bd4M3O-ImD_UfGdgFGxlt9Ktty-414clHi4DAvelNhZJSl_USoyltV0-rUpa8dA&scope=https://www.googleapis.com/auth/calendar
+Django Version:	6.0.5
+Exception Type:	InsecureTransportError
+Exception Value:	
+(insecure_transport) OAuth 2 MUST utilize https.
+Exception Location:	C:\Users\ansar\Programs\Django\HMS\venv\Lib\site-packages\oauthlib\oauth2\rfc6749\parameters.py, line 271, in parse_authorization_code_response
+Raised during:	booking_system.views.google_callback
+Python Executable:	C:\Users\ansar\Programs\Django\HMS\venv\Scripts\python.exe
+Python Version:	3.14.4
+Python Path:	
+['C:\\Users\\ansar\\Programs\\Django\\HMS',
+ 'C:\\Program Files\\Python314\\python314.zip',
+ 'C:\\Program Files\\Python314\\DLLs',
+ 'C:\\Program Files\\Python314\\Lib',
+ 'C:\\Program Files\\Python314',
+ 'C:\\Users\\ansar\\Programs\\Django\\HMS\\venv',
+ 'C:\\Users\\ansar\\Programs\\Django\\HMS\\venv\\Lib\\site-packages']
+Server time:	Tue, 19 May 2026 15:49:57 +0000
+
+
+This is normal during local development.
+
+Google OAuth expects HTTPS, but localhost development is a special case.
+
+For local testing only, add this BEFORE your OAuth flow code runs:
+
+import os
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+Usually near the top of your views.py:
+
+import os
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+from google_auth_oauthlib.flow import Flow
+Why This Happens
+OAuthlib blocks:
+
+http://
+because production OAuth should use:
+
+https://
+But localhost development is allowed by Google.
+
+This environment variable tells OAuthlib:
+
+“I know this is insecure because I’m developing locally.”
+
+IMPORTANT
+Do NOT use this in production.
+
+For this assignment:
+
+completely acceptable
+
+very common during local OAuth development
+
+Another Important Thing To Check
+Make sure your Google OAuth redirect URI EXACTLY matches:
+
+http://127.0.0.1:8000/google/callback/
+inside:
+
+Google Cloud Console
+
+your Django flow config
+
+Even a missing trailing slash can fail.
+
+After This
+Your next likely issue may be:
+
+missing state
+
+invalid redirect URI
+
+token serialization problems
+
+Those are normal too.
+
+OAuth setup is usually the messiest part of these assignments. The important thing is getting one successful authorization flow working locally

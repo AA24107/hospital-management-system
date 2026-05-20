@@ -74,20 +74,24 @@ def book_slot(request, slot_id):
         Booking.objects.create(doctor=slot.doctor, patient=request.user, slot=slot)
         slot.is_booked = True
         slot.save()
-        event = {
-            "summary": f"Appointment with Dr. {slot.doctor.username}",
-            "description": f"Patient: {request.user.username}",
-            "start": {
-                "dateTime": slot.start_time.isoformat(),
-                "timeZone": "Asia/Kolkata",
-            },
-            "end": {
-                "dateTime": slot.end_time.isoformat(),
-                "timeZone": "Asia/Kolkata",
-            },
-        }
-        create_event_for_user(slot.doctor, event)
-        create_event_for_user(request.user, event)
+        try:
+            event = {
+                "summary": f"Appointment with Dr. {slot.doctor.username}",
+                "description": f"Patient: {request.user.username}",
+                "start": {
+                    "dateTime": slot.start_time.isoformat(),
+                    "timeZone": "Asia/Kolkata",
+                },
+                "end": {
+                    "dateTime": slot.end_time.isoformat(),
+                    "timeZone": "Asia/Kolkata",
+                },
+            }
+            create_event_for_user(slot.doctor, event)
+            create_event_for_user(request.user, event)
+    
+        except Exception as e:
+            messages.error(request, 'Error occurred while creating Google Calendar event')
 
         return HttpResponseRedirect(reverse('index'))
 

@@ -2,16 +2,14 @@
 
 A local-first hospital management backend application built with Django, focused on doctor availability management and patient appointment booking with Google Calendar integration.
 
-This project was built as part of a backend engineering internship shortlisting task.
-
 ---
 
 # Features
 
 ## Authentication & Roles
 
-* Doctor and Patient signup/login
-* Password hashing using Django authentication system
+* Doctor and Patient sign up/log in
+* Password hashing using the Django authentication system
 * Role-based access control
 * Separate dashboards for doctors and patients
 
@@ -67,7 +65,6 @@ The booking flow includes transactional protection to reduce the risk of double 
 ```text
 your-repo/
 ├── README.md
-├── ai-tool-usage-log/
 ├── booking_system/
 ├── HMS/
 ├── manage.py
@@ -161,8 +158,8 @@ The application uses Django’s built-in authentication system with a custom rol
 
 Access restrictions are enforced in views to ensure:
 
-* doctors cannot perform patient actions
-* patients cannot perform doctor actions
+* Doctors cannot perform patient actions
+* Patients cannot perform doctor actions
 
 ---
 
@@ -177,9 +174,9 @@ Patients can only see:
 
 When a patient books a slot:
 
-1. slot availability is checked
-2. booking is created
-3. slot is marked as booked
+1. Slot availability is checked
+2. Booking is created
+3. The slot is marked as booked
 4. Google Calendar events are created
 
 ---
@@ -203,7 +200,7 @@ Events are created separately for:
 
 One important challenge was handling race conditions during appointment booking.
 
-If two patients attempt to book the same slot at nearly the same time, both requests may initially see the slot as available, leading to inconsistent booking state or double booking.
+If two patients attempt to book the same slot at nearly the same time, both requests may initially see the slot as available, leading to an inconsistent booking state or double booking.
 
 ---
 
@@ -229,9 +226,9 @@ The chosen approach used database transactions during the booking process to mak
 
 This approach was chosen because:
 
-* it better reflects real backend system design
-* it reduces concurrency-related inconsistencies
-* it separates validation from persistence logic more safely
+* It better reflects real backend system design
+* It reduces concurrency-related inconsistencies
+* It separates validation from persistence logic more safely
 
 Although SQLite has limited concurrency handling compared to PostgreSQL, implementing transactional booking logic still provided a more scalable and architecturally sound approach.
 
@@ -278,7 +275,7 @@ Additional validation, auditing, monitoring, and error handling would be needed 
 
 # AI Tool Usage
 
-AI tools including ChatGPT were used during development for:
+AI tools, including ChatGPT, were used during development for:
 
 * debugging
 * architecture discussion

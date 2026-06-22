@@ -260,7 +260,13 @@ Additional validation, auditing, monitoring, and error handling would be needed 
 
 ---
 
-# Demo Features Shown
+# Demo Video
+
+[![Watch the demo](https://img.youtube.com/vi/FJY4YVim_y0/0.jpg)](https://youtu.be/FJY4YVim_y0)
+
+---
+
+## Demo Features Shown
 
 * Doctor signup/login
 * Patient signup/login
@@ -270,23 +276,6 @@ Additional validation, auditing, monitoring, and error handling would be needed 
 * Google OAuth flow
 * Calendar event creation in both user calendars
 * Role-based access restrictions
-
----
-
-# AI Tool Usage
-
-AI tools, including ChatGPT, were used during development for:
-
-* debugging
-* architecture discussion
-* OAuth integration guidance
-* concurrency handling discussion
-
-Relevant logs are included inside:
-
-```text
-ai-tool-usage-log/
-```
 
 ---
 
